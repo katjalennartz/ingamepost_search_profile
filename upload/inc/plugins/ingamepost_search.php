@@ -48,7 +48,7 @@ function ingamepost_search_install(){
       'title' => 'Anzeige Suchergebnis',
       'description' => 'Soll das Suchergebnis als Postliste oder Threadliste ausgeben werden?',
       'optionscode' => "select\nthreads=Thread\nposts=Post",
-      'value' => 2,
+      'value' => "posts",
       'disporder' => 2
     )
 );
