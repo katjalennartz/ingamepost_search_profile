@@ -126,7 +126,7 @@ function ingamepost_search_start()
     $posts = substr($posts, 0, -1);
 
     $query2 = $db->write_query("SELECT DISTINCT(tid) from mybb_posts,
-    (SELECT fid as fff FROM mybb_forums WHERE concat(',',parentlist,',') LIKE '%,4,%' OR concat(',',parentlist,',') LIKE '%,29,%') as f
+    (SELECT fid as fff FROM ".TABLE_PREFIX."forums WHERE concat(',',parentlist,',') LIKE '%,4,%' OR concat(',',parentlist,',') LIKE '%,29,%') as f
     where fff = fid and uid = {$uid}");
     while ($result = $db->fetch_array($query2)) {
       $threads .= $result['tid'] . ",";
