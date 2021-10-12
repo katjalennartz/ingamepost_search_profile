@@ -117,15 +117,15 @@ function ingamepost_search_start()
 
   if ($mybb->input['action'] == "findingameposts") {
     $uid = intval($mybb->input['uid']);
-    $query = $db->write_query("SELECT * from mybb_posts,
-    (SELECT fid as fff FROM mybb_forums WHERE {$where}) as f
+    $query = $db->write_query("SELECT * from " . TABLE_PREFIX . "posts,
+    (SELECT fid as fff FROM " . TABLE_PREFIX . "forums WHERE {$where}) as f
     where fff = fid and uid = {$uid}");
     while ($result = $db->fetch_array($query)) {
       $posts .= $result['pid'] . ",";
     }
     $posts = substr($posts, 0, -1);
 
-    $query2 = $db->write_query("SELECT DISTINCT(tid) from mybb_posts,
+    $query2 = $db->write_query("SELECT DISTINCT(tid) from " . TABLE_PREFIX . "posts,
     (SELECT fid as fff FROM ".TABLE_PREFIX."forums WHERE {$where} ) as f
     where fff = fid and uid = {$uid}");
     while ($result = $db->fetch_array($query2)) {
