@@ -25,7 +25,8 @@ function ingamepost_search_is_installed()
   return false;
 }
 
-function ingamepost_search_install(){
+function ingamepost_search_install()
+{
   global $db;
   // Einstellungen
   $setting_group = array(
@@ -51,16 +52,17 @@ function ingamepost_search_install(){
       'value' => "posts",
       'disporder' => 2
     )
-);
+  );
 
-foreach ($setting_array as $name => $setting) {
-  $setting['name'] = $name;
-  $setting['gid'] = $gid;
-  $db->insert_query('settings', $setting);
+  foreach ($setting_array as $name => $setting) {
+    $setting['name'] = $name;
+    $setting['gid'] = $gid;
+    $db->insert_query('settings', $setting);
+  }
+  rebuild_settings();
 }
-rebuild_settings();
-}
-function ingamepost_search_uninstall(){
+function ingamepost_search_uninstall()
+{
   global $db;
   // Einstellungen entfernen
   $db->delete_query("settings", "name LIKE 'ingame_search%'");
@@ -75,7 +77,6 @@ function ingamepost_search_activate()
 
   require "../inc/adminfunctions_templates.php";
   find_replace_templatesets("member_profile", "#" . preg_quote('{$warning_level}') . "#i", '{$warning_level}{$ingamesearchlink}');
-
 }
 
 function ingamepost_search_deactivate()
@@ -84,7 +85,6 @@ function ingamepost_search_deactivate()
 
   require "../inc/adminfunctions_templates.php";
   find_replace_templatesets("member_profile", "#" . preg_quote('{$ingamesearchlink}') . "#i", '');
-
 }
 
 
@@ -106,27 +106,27 @@ function ingamepost_search_start()
   // $fidsstr= $mybb->settings['ingame_search_fids'];
   $fidsarray = array_filter(explode(",", $mybb->settings['ingame_search_fids']));
   $art = $mybb->settings['ingame_search_art'];
-  $where ="";
-  foreach($fidsarray as $value) {
+  $where = "";
+  foreach ($fidsarray as $value) {
     $where .= "concat(',',parentlist,',') LIKE '%,{$value},%' OR ";
   }
   //letztes or löschen
   $where = substr($where, 0, -3);
-  $posts ="";
-  $threads ="";
+  $posts = "";
+  $threads = "";
 
   if ($mybb->input['action'] == "findingameposts") {
     $uid = intval($mybb->input['uid']);
-    $query = $db->write_query("SELECT * from mybb_posts,
-    (SELECT fid as fff FROM mybb_forums WHERE {$where}) as f
+    $query = $db->write_query("SELECT * from " . TABLE_PREFIX . "posts,
+    (SELECT fid as fff FROM " . TABLE_PREFIX . "forums WHERE {$where}) as f
     where fff = fid and uid = {$uid}");
     while ($result = $db->fetch_array($query)) {
       $posts .= $result['pid'] . ",";
     }
     $posts = substr($posts, 0, -1);
 
-    $query2 = $db->write_query("SELECT DISTINCT(tid) from mybb_posts,
-    (SELECT fid as fff FROM ".TABLE_PREFIX."forums WHERE {$where} ) as f
+    $query2 = $db->write_query("SELECT DISTINCT(tid) from " . TABLE_PREFIX . "posts,
+    (SELECT fid as fff FROM " . TABLE_PREFIX . "forums WHERE {$where} ) as f
     where fff = fid and uid = {$uid}");
     while ($result = $db->fetch_array($query2)) {
       $threads .= $result['tid'] . ",";
